@@ -1,0 +1,12 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><title>Sales</title><link rel="stylesheet" href="/css/style.css"><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet"></head><body>
+    <nav><a href="/employee/dashboard">Dashboard</a> <a href="/employee/sales">Sales</a> <a href="/logout">Log Out</a></nav>
+    <h1>Sales Records</h1><table border="1"><tr><th>ID</th><th>Order</th><th>Prod</th><th>Qty</th><th>Price</th><th>Date</th></tr><tbody id="sales"></tbody></table>
+    <script>
+    (async()=>{
+      const res=await fetch('/employee/api/sales'), list=await res.json();
+      const t=document.getElementById('sales'); t.innerHTML='';
+      list.forEach(s=> t.innerHTML+=`<tr><td>${s.SALE_ID}</td><td>${s.ORDER_ID}</td><td>${s.PRODUCT_ID}</td><td>${s.QUANTITY}</td><td>₹${s.SALE_PRICE}</td><td>${new Date(s.SALE_DATE).toLocaleDateString()}</td></tr>`);
+    })();
+    </script>
+    </body></html>
+    

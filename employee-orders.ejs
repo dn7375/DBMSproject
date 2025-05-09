@@ -1,0 +1,65 @@
+<div class="page-container">
+  <header class="header">
+    <nav class="nav-container">
+      <a href="/employee/dashboard" class="nav-link">Dashboard</a>
+      <a href="/employee/products-manage" class="nav-link">Products</a>
+      <a href="/employee/orders" class="nav-link active">Orders</a>
+      <a href="/employee/users" class="nav-link">Users</a>
+      <a href="/employee/suppliers" class="nav-link">Suppliers</a>
+      <a href="/employee/warehouses" class="nav-link">Warehouses</a>
+      <a href="/employee/returns" class="nav-link">Returns</a>
+      <a href="/employee/reviews" class="nav-link">Reviews</a>
+      <a href="/logout" class="nav-link">Log Out</a>
+    </nav>
+  </header>
+
+  <main class="main-content">
+    <div class="card">
+      <div class="card-header">
+        <h2 class="card-title">Order Management</h2>
+      </div>
+      
+      <div class="table-container">
+        <% if (orders && orders.length > 0) { %>
+          <table>
+            <thead>
+              <tr>
+                <th>Order ID</th>
+                <th>Date</th>
+                <th>Customer</th>
+                <th>Total (₹)</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              <% orders.forEach(o => { %>
+                <tr>
+                  <td><strong>#<%= o.id %></strong></td>
+                  <td><%= new Date(o.date).toLocaleDateString() %></td>
+                  <td><%= o.customer %></td>
+                  <td class="price-column">₹<%= o.total.toFixed(2) %></td>
+                  <td>
+                    <button class="btn btn-secondary btn-sm view-order" data-id="<%= o.id %>">View</button>
+                  </td>
+                </tr>
+              <% }); %>
+            </tbody>
+          </table>
+        <% } else { %>
+          <p class="no-data">No orders available</p>
+        <% } %>
+      </div>
+    </div>
+  </main>
+</div>
+
+<style>
+  .price-column {
+    font-weight: 500;
+    color: var(--primary);
+  }
+  .btn-sm {
+    padding: 0.25rem 0.5rem;
+    font-size: 0.875rem;
+  }
+</style>

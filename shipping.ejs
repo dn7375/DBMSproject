@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Stockmate — Shipping Status</title>
+    <link rel="stylesheet" href="/css/style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+  <header>
+    <nav>
+      <a href="/customer/products">Shop</a>
+      <a href="/customer/cart">Cart</a>
+      <a href="/customer/shipping">Shipping</a>
+      <a href="/customer/returns">Returns</a>
+      <a href="/customer/reviews">Reviews</a>
+      <a href="/logout">Log Out</a>
+    </nav>
+  </header>
+
+  <div class="container">
+    <h1>Your Orders & Shipping Status</h1>
+    <table class="card-grid" border="1">
+      <thead>
+        <tr>
+          <th>Order #</th>
+          <th>Order Date</th>
+          <th>Total Amount</th>
+          <th>Status</th>
+          <th>ETA</th>
+          <th>Action</th>
+        </tr>
+      </thead>
+      <tbody id="shipping-list">
+        <!-- JS will populate rows here -->
+      </tbody>
+    </table>
+  </div>
+
+  <script>
+    async function loadShipping() {
+      const res = await fetch('/customer/api/shipping-status');
+      const list = await res.json();
+      const tbody = document.getElementById('shipping-list');
+      tbody.innerHTML = '';
+
+      list.forEach(item => {
+        const tr = document.createElement('tr');
+        tr.innerHTML = `
+          <td>${item.ORDER_ID}</td>
+          <td>${new Date(item.ORDER_DATE).toLocaleDateString()}</td>
+          <td>₹${item.TOTAL_AMOUNT.toFixed(2)}</td>
+          <td><strong>${item.STATUS}</strong></td>
+          <td>${new Date(item.ESTIMATED_DELIVERY).toLocaleDateString()}</td>
+          <td>${item.STATUS === 'Pending' ? `<button data-order="${item.ORDER_ID}">Cancel</button>` : ''}</td>
+        `;
+        tbody.appendChild(tr);
+      });
+    }
+
+    document.getElementById('shipping-list').addEventListener('click', async e => {
+      if (e.target.dataset.order) {
+        const orderId = e.target.dataset.order;
+        const resp = await fetch('/customer/api/cancel-order', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ orderId })
+        });
+        if (resp.ok) {
+          alert('Order cancelled.');
+          loadShipping();
+        } else {
+          const err = await resp.json();
+          alert('Error: ' + err.error);
+        }
+      }
+    });
+
+    loadShipping();
+  </script>
+</body>
+</html>

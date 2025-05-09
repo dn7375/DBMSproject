@@ -1,0 +1,12 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><title>Orders</title><link rel="stylesheet" href="/css/style.css"><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet"></head><body>
+    <nav><a href="/customer/products">Shop</a> <a href="/customer/cart">Cart</a> <a href="/customer/orders">Orders</a> <a href="/logout">Log Out</a></nav>
+    <h1>Your Orders</h1><table border="1"><tr><th>Order ID</th><th>Date</th><th>Total</th></tr><tbody id="orders"></tbody></table>
+    <script>
+    (async()=>{
+      const res=await fetch('/customer/api/orders'), list=await res.json();
+      const t=document.getElementById('orders'); t.innerHTML='';
+      list.forEach(o=> t.innerHTML+=`<tr><td>${o.ORDER_ID}</td><td>${new Date(o.ORDER_DATE).toLocaleDateString()}</td><td>₹${o.TOTAL_AMOUNT.toFixed(2)}</td></tr>`);
+    })();
+    </script>
+    </body></html>
+    

@@ -1,0 +1,19 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><title>Returns</title><link rel="stylesheet" href="/css/style.css"><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet"></head><body>
+  <nav><a href="/customer/products">Shop</a> <a href="/customer/cart">Cart</a> <a href="/customer/shipping">Shipping</a> <a href="/customer/returns">Returns</a> <a href="/customer/reviews">Reviews</a> <a href="/customer/notifications">Notifications</a> <a href="/customer/loyalty">Loyalty</a> <a href="/logout">Log Out</a></nav>
+  <h1>Your Returns</h1><table border="1"><tr><th>Return ID</th><th>Order ID</th><th>Product ID</th><th>Reason</th><th>Date</th></tr><tbody id="returns"></tbody></table>
+  <form id="frm"><input name="orderId" placeholder="Order ID" required><input name="productId" placeholder="Product ID" required><input name="reason" placeholder="Reason" required><button>Request Return</button></form>
+  <script>
+  async function load(){
+    const res=await fetch('/customer/api/returns'), list=await res.json();
+    const t=document.getElementById('returns'); t.innerHTML='';
+    list.forEach(r=> t.innerHTML+=`<tr><td>${r.RETURN_ID}</td><td>${r.ORDER_ID}</td><td>${r.PRODUCT_ID}</td><td>${r.REASON}</td><td>${new Date(r.RETURN_DATE).toLocaleDateString()}</td></tr>`);
+  }
+  document.getElementById('frm').onsubmit=async e=>{
+    e.preventDefault(); const f=new FormData(e.target);
+    await fetch('/customer/api/returns',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({orderId:f.get('orderId'),productId:f.get('productId'),reason:f.get('reason')})});
+    e.target.reset(); load();
+  };
+  load();
+  </script>
+  </body></html>
+  

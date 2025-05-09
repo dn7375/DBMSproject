@@ -1,0 +1,12 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><title>Logs</title><link rel="stylesheet" href="/css/style.css"><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet"></head><body>
+  <nav><a href="/employee/dashboard">Dashboard</a> <a href="/employee/logs">Logs</a> <a href="/logout">Log Out</a></nav>
+  <h1>Activity Logs</h1><table border="1"><tr><th>ID</th><th>Emp ID</th><th>Action</th><th>Timestamp</th></tr><tbody id="logs"></tbody></table>
+  <script>
+  (async()=>{
+    const res=await fetch('/employee/api/logs'), list=await res.json();
+    const t=document.getElementById('logs'); t.innerHTML='';
+    list.forEach(l=> t.innerHTML+=`<tr><td>${l.LOG_ID}</td><td>${l.EMPLOYEE_ID}</td><td>${l.ACTION}</td><td>${new Date(l.TIMESTAMP).toLocaleString()}</td></tr>`);
+  })();
+  </script>
+  </body></html>
+  

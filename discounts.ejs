@@ -1,0 +1,23 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><title>Discounts</title><link rel="stylesheet" href="/css/style.css"><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet"></head><body>
+    <nav><a href="/employee/dashboard">Dashboard</a> <a href="/employee/discounts">Discounts</a> <a href="/logout">Log Out</a></nav>
+    <h1>Product Discounts</h1>
+    <table border="1"><tr><th>ID</th><th>Prod</th><th>%</th><th>Start</th><th>End</th></tr><tbody id="disc"></tbody></table>
+    <form id="dform"><input name="productId" placeholder="Prod ID" required><input name="discountPercentage" placeholder="%" required><input name="startDate" type="date" required><input name="endDate" type="date" required><button>Add Discount</button></form>
+    <script>
+    async function load(){
+      const res=await fetch('/employee/api/discounts'), list=await res.json();
+      const t=document.getElementById('disc'); t.innerHTML='';
+      list.forEach(d=> t.innerHTML+=`<tr><td>${d.DISCOUNT_ID}</td><td>${d.PRODUCT_ID}</td><td>${d.DISCOUNT_PERCENTAGE}</td><td>${d.START_DATE}</td><td>${d.END_DATE}</td></tr>`);
+    }
+    document.getElementById('dform').onsubmit=async e=>{
+      e.preventDefault(); const f=new FormData(e.target);
+      await fetch('/employee/api/discounts',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({
+        productId:f.get('productId'),discountPercentage:f.get('discountPercentage'),
+        startDate:f.get('startDate'),endDate:f.get('endDate')
+      })});
+      e.target.reset(); load();
+    };
+    load();
+    </script>
+    </body></html>
+    

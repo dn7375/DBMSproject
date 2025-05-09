@@ -1,0 +1,35 @@
+<!-- views/notifications.ejs -->
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Your Notifications</title>
+  <link rel="stylesheet" href="/css/style.css">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+  <nav>
+    <a href="/customer/products">Shop</a>
+    <a href="/customer/cart">Cart</a>
+    <a href="/customer/shipping">Shipping</a>
+    <a href="/customer/notifications">Notifications</a>
+    <a href="/customer/loyalty">Loyalty</a>
+    <a href="/logout">Log Out</a>
+  </nav>
+
+  <div class="container">
+    <h1>Notifications</h1>
+    <div class="card-grid">
+      <% if (notifications.length === 0) { %>
+        <p>You have no notifications.</p>
+      <% } else { %>
+        <% notifications.forEach(n => { %>
+          <div class="card">
+            <p><%= n.message %></p>
+            <small>Status: <%= n.status %> — <%= new Date(n.created).toLocaleString() %></small>
+          </div>
+        <% }) %>
+      <% } %>
+    </div>
+  </div>
+</body>
+</html>

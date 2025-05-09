@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Monitor Reviews</title>
+  <link rel="stylesheet" href="/css/style.css">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+  <header>
+    <nav>
+      <a href="/employee/dashboard">Dashboard</a>
+      <a href="/employee/returns">Returns</a>
+      <a href="/employee/reviews">Reviews</a>
+      <a href="/logout">Log Out</a>
+    </nav>
+  </header>
+
+  <div class="container">
+    <h1>All Product Reviews</h1>
+    <% if (reviews.length === 0) { %>
+      <p>No reviews recorded.</p>
+    <% } else { %>
+      <table style="width:100%; border-collapse:collapse;">
+        <thead>
+          <tr>
+            <th style="text-align:left; padding:8px; border-bottom:1px solid #ccc;">Review ID</th>
+            <th style="text-align:left; padding:8px; border-bottom:1px solid #ccc;">Product ID</th>
+            <th style="text-align:left; padding:8px; border-bottom:1px solid #ccc;">Customer ID</th>
+            <th style="text-align:left; padding:8px; border-bottom:1px solid #ccc;">Rating</th>
+            <th style="text-align:left; padding:8px; border-bottom:1px solid #ccc;">Text</th>
+            <th style="text-align:left; padding:8px; border-bottom:1px solid #ccc;">Date</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% reviews.forEach(rv => { %>
+            <tr>
+              <td style="padding:8px; border-bottom:1px solid #eee;"><%= rv.id %></td>
+              <td style="padding:8px; border-bottom:1px solid #eee;"><%= rv.productId %></td>
+              <td style="padding:8px; border-bottom:1px solid #eee;"><%= rv.customerId %></td>
+              <td style="padding:8px; border-bottom:1px solid #eee;"><%= rv.rating %></td>
+              <td style="padding:8px; border-bottom:1px solid #eee;"><%= rv.text %></td>
+              <td style="padding:8px; border-bottom:1px solid #eee;"><%= new Date(rv.date).toLocaleString() %></td>
+            </tr>
+          <% }) %>
+        </tbody>
+      </table>
+    <% } %>
+  </div>
+</body>
+</html>

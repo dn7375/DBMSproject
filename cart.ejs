@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Stockmate — Cart</title>
+    <link rel="stylesheet" href="/css/style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <header class="header">
+        <nav class="nav-container">
+            <a href="/customer/dashboard" class="nav-link">Dashboard</a>
+            <a href="/customer/products" class="nav-link">Shop</a>
+            <a href="/customer/cart" class="nav-link active">Cart</a>
+            <a href="/customer/shipping" class="nav-link">Shipping</a>
+            <a href="/logout" class="nav-link">Log Out</a>
+        </nav>
+    </header>
+
+    <div class="container">
+        <h1>Your Cart</h1>
+        <% if (cart && cart.length > 0) { %>
+            <div class="card-grid">
+                <% cart.forEach(item => { %>
+                    <div class="card">
+                        <div class="card-header">
+                            <h3 class="card-title"><%= item.name %></h3>
+                        </div>
+                        <p class="product-price">₹<%= item.price.toFixed(2) %></p>
+                        <p>Quantity: <%= item.qty %></p>
+                        <p class="price-column">Total: ₹<%= (item.price * item.qty).toFixed(2) %></p>
+                    </div>
+                <% }); %>
+            </div>
+            <div class="card" style="margin-top: 20px;">
+                <div class="card-header">
+                    <h3 class="card-title">Order Summary</h3>
+                </div>
+                <p class="price-column">Total: ₹<%= cart.reduce((sum, item) => sum + (item.price * item.qty), 0).toFixed(2) %></p>
+                <button class="btn btn-primary" style="margin-top: 10px;">Proceed to Checkout</button>
+            </div>
+        <% } else { %>
+            <div class="card">
+                <p>Your cart is empty.</p>
+                <a href="/customer/products" class="btn btn-primary" style="margin-top: 10px;">Continue Shopping</a>
+            </div>
+        <% } %>
+    </div>
+</body>
+</html>

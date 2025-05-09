@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>All Users</title>
+  <link rel="stylesheet" href="/css/style.css">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+  <header>
+    <nav>
+      <a href="/employee/dashboard">Dashboard</a>
+      <a href="/employee/users">Users</a>
+      <a href="/logout">Log Out</a>
+    </nav>
+  </header>
+  <div class="container">
+    <h1>All Users</h1>
+    <% if (users.length === 0) { %>
+      <p>No users found.</p>
+    <% } else { %>
+      <table style="width:100%; border-collapse:collapse;">
+        <thead>
+          <tr>
+            <th style="padding:8px;border-bottom:1px solid #ccc;">ID</th>
+            <th style="padding:8px;border-bottom:1px solid #ccc;">Username</th>
+            <th style="padding:8px;border-bottom:1px solid #ccc;">Role</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% users.forEach(u => { %>
+            <tr>
+              <td style="padding:8px;border-bottom:1px solid #eee;"><%= u.id %></td>
+              <td style="padding:8px;border-bottom:1px solid #eee;"><%= u.username %></td>
+              <td style="padding:8px;border-bottom:1px solid #eee;"><%= u.role %></td>
+            </tr>
+          <% }) %>
+        </tbody>
+      </table>
+    <% } %>
+  </div>
+</body>
+</html>

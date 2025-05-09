@@ -1,0 +1,19 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><title>Reviews</title><link rel="stylesheet" href="/css/style.css"><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet"></head><body>
+  <nav><a href="/customer/products">Shop</a> <a href="/customer/cart">Cart</a> <a href="/customer/shipping">Shipping</a> <a href="/customer/returns">Returns</a> <a href="/customer/reviews">Reviews</a> <a href="/customer/notifications">Notifications</a> <a href="/customer/loyalty">Loyalty</a> <a href="/logout">Log Out</a></nav>
+  <h1>Your Reviews</h1><table border="1"><tr><th>Review ID</th><th>Product ID</th><th>Rating</th><th>Text</th><th>Date</th></tr><tbody id="reviews"></tbody></table>
+  <form id="f"><input name="productId" placeholder="Product ID" required><input name="rating" type="number" min="1" max="5" placeholder="Rating" required><textarea name="reviewText" placeholder="Review"></textarea><button>Submit Review</button></form>
+  <script>
+  async function load(){
+    const res=await fetch('/customer/api/reviews'), list=await res.json();
+    const t=document.getElementById('reviews'); t.innerHTML='';
+    list.forEach(r=> t.innerHTML+=`<tr><td>${r.REVIEW_ID}</td><td>${r.PRODUCT_ID}</td><td>${r.RATING}</td><td>${r.REVIEW_TEXT}</td><td>${new Date(r.REVIEW_DATE).toLocaleDateString()}</td></tr>`);
+  }
+  document.getElementById('f').onsubmit=async e=>{
+    e.preventDefault(); const fd=new FormData(e.target);
+    await fetch('/customer/api/reviews',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({productId:fd.get('productId'),rating:fd.get('rating'),reviewText:fd.get('reviewText')})});
+    e.target.reset(); load();
+  };
+  load();
+  </script>
+  </body></html>
+  

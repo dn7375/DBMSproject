@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Stockmate — Products</title>
+    <link rel="stylesheet" href="/css/style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <header class="header">
+        <nav class="nav-container">
+            <a href="/customer/dashboard" class="nav-link">Dashboard</a>
+            <a href="/customer/products" class="nav-link active">Shop</a>
+            <a href="/customer/cart" class="nav-link">Cart</a>
+            <a href="/customer/shipping" class="nav-link">Shipping</a>
+            <a href="/logout" class="nav-link">Log Out</a>
+        </nav>
+    </header>
+
+    <div class="container">
+        <h1>Products</h1>
+        <div class="products-grid">
+          <% products.forEach(function(p) { %>
+            <div class="card product-card">
+              <h3 class="product-title"><%= p.name %></h3>
+              <span class="product-category"><%= p.category %></span>
+              <p class="product-description"><%= p.description %></p>
+              <div class="product-price">₹<%= p.price.toFixed(2) %></div>
+              <p class="product-stock">Stock: <%= p.stock %></p>
+              <form class="add-to-cart-form" action="/customer/api/cart" method="POST">
+                <input type="hidden" name="productId" value="<%= p.id %>">
+                <div class="quantity-control">
+                  <label for="quantity-<%= p.id %>">Quantity:</label>
+                  <input type="number" id="quantity-<%= p.id %>" name="quantity" value="1" min="1" max="<%= p.stock %>" required>
+                </div>
+                <button type="submit" class="btn btn-primary">Add to Cart</button>
+              </form>
+            </div>
+          <% }); %>
+        </div>
+
+        <% if (!products || products.length === 0) { %>
+          <div class="no-products">
+            <p>No products available at the moment.</p>
+          </div>
+        <% } %>
+    </div>
+</body>
+</html>

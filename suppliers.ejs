@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Manage Suppliers</title>
+  <link rel="stylesheet" href="/css/style.css">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+  <nav>
+    <a href="/employee/dashboard">Dashboard</a>
+    <a href="/employee/products-manage">Products</a>
+    <a href="/employee/suppliers">Suppliers</a>
+    <a href="/employee/warehouses">Warehouses</a>
+    <a href="/logout">Log Out</a>
+  </nav>
+  <div class="container">
+    <h1>Suppliers</h1>
+    <form id="supplier-form">
+      <input type="hidden" id="supplier-id">
+      <input id="name" placeholder="Name" required>
+      <input id="contact-info" placeholder="Contact Info">
+      <input id="address" placeholder="Address">
+      <button type="submit">Save</button>
+    </form>
+    <div id="supplier-list" class="card-grid">
+      <% suppliers.forEach(s => { %>
+        <div class="card">
+          <h3><%= s.name %></h3>
+          <p><%= s.contactInfo %></p>
+          <p><%= s.address %></p>
+          <button data-edit="<%= s.id %>">Edit</button>
+          <button data-delete="<%= s.id %>">Delete</button>
+        </div>
+      <% }) %>
+    </div>
+  </div>
+  <script>
+    // same JS from before to call /employee/api/suppliers/*
+    // ...
+  </script>
+</body>
+</html>

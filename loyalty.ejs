@@ -1,0 +1,32 @@
+<!-- views/loyalty.ejs -->
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Your Loyalty Program</title>
+  <link rel="stylesheet" href="/css/style.css">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+  <nav>
+    <a href="/customer/products">Shop</a>
+    <a href="/customer/cart">Cart</a>
+    <a href="/customer/shipping">Shipping</a>
+    <a href="/customer/notifications">Notifications</a>
+    <a href="/customer/loyalty">Loyalty</a>
+    <a href="/logout">Log Out</a>
+  </nav>
+
+  <div class="container">
+    <h1>Loyalty Program</h1>
+    <% if (!loyalty) { %>
+      <p>You’re not enrolled in the loyalty program yet.</p>
+    <% } else { %>
+      <div class="card">
+        <p><strong>Program ID:</strong> <%= loyalty.id %></p>
+        <p><strong>Points:</strong>     <%= loyalty.points %></p>
+        <p><strong>Tier:</strong>       <%= loyalty.tier %></p>
+      </div>
+    <% } %>
+  </div>
+</body>
+</html>

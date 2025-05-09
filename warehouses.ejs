@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Manage Warehouses</title>
+  <link rel="stylesheet" href="/css/style.css">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+  <nav>
+    <a href="/employee/dashboard">Dashboard</a>
+    <a href="/employee/products-manage">Products</a>
+    <a href="/employee/suppliers">Suppliers</a>
+    <a href="/employee/warehouses">Warehouses</a>
+    <a href="/logout">Log Out</a>
+  </nav>
+  <div class="container">
+    <h1>Warehouses</h1>
+    <form id="warehouse-form">
+      <input type="hidden" id="warehouse-id">
+      <input id="name" placeholder="Name" required>
+      <input id="location" placeholder="Location">
+      <input id="capacity" type="number" placeholder="Capacity" required>
+      <button type="submit">Save</button>
+      <button type="button" id="reset-form">Reset</button>
+    </form>
+    <div id="warehouse-list" class="card-grid">
+      <% warehouses.forEach(w => { %>
+        <div class="card">
+          <h3><%= w.name %></h3>
+          <p>Loc: <%= w.location %></p>
+          <p>Cap: <%= w.capacity %></p>
+          <button data-edit="<%= w.id %>" class="edit-btn">Edit</button>
+          <button data-delete="<%= w.id %>" class="delete-btn">Delete</button>
+        </div>
+      <% }) %>
+    </div>
+  </div>
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      const form = document.getElementById('warehouse-form');
+      const warehouseIdInput = document.getElementById('warehouse-id');
+      const nameInput = document.getElementById('name');
+      const locationInput = document.getElementById('location');
+      const capacityInput = document.getElementById('capacity');
+      const resetFormBtn = document.getElementById('reset-form');
+      
+      // Reset form function
+      function resetForm() {
+        form.reset();
+        warehouseIdInput.value = '';
+        form.querySelector('button[type="submit"]').textContent = 'Save';
+      }
+      
+      // Add event listener for reset button
+      resetFormBtn.addEventListener('click', resetForm);
+      
+      // Handle form submission (create or update)
+      form.addEventListener('submit', async function(e) {
+        e.preventDefault();
+        
+        const warehouseData = {
+          name: nameInput.value,
+          location: locationInput.value,
+          capacity: capacityInput.value
+        };
+        
+        const warehouseId = warehouseIdInput.value;
+        let url = '/employee/api/warehouses';
+        let method = 'POST';
+        
+        if (warehouseId) {
+          url += `/${warehouseId}`;
+          method = 'PUT';
+        }
+        
+        try {
+          const response = await fetch(url, {
+            method,
+            headers: {
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(warehouseData)
+          });
+          
+          if (!response.ok) {
+            throw new Error('Failed to save warehouse');
+          }
+          
+          // Refresh the page to show updated data
+          window.location.reload();
+        } catch (error) {
+          console.error('Error:', error);
+          alert('Failed to save warehouse: ' + error.message);
+        }
+      });
+      
+      // Handle edit button clicks
+      document.querySelectorAll('.edit-btn').forEach(button => {
+        button.addEventListener('click', async function() {
+          const warehouseId = this.getAttribute('data-edit');
+          
+          try {
+            const response = await fetch(`/employee/api/warehouses/${warehouseId}`);
+            if (!response.ok) {
+              throw new Error('Failed to fetch warehouse data');
+            }
+            
+            const warehouse = await response.json();
+            
+            // Populate form with warehouse data
+            warehouseIdInput.value = warehouse.WAREHOUSE_ID;
+            nameInput.value = warehouse.NAME;
+            locationInput.value = warehouse.LOCATION;
+            capacityInput.value = warehouse.CAPACITY;
+            
+            // Change button text to indicate editing
+            form.querySelector('button[type="submit"]').textContent = 'Update';
+            
+            // Scroll to form
+            form.scrollIntoView({ behavior: 'smooth' });
+          } catch (error) {
+            console.error('Error:', error);
+            alert('Failed to load warehouse data: ' + error.message);
+          }
+        });
+      });
+      
+      // Handle delete button clicks
+      document.querySelectorAll('.delete-btn').forEach(button => {
+        button.addEventListener('click', async function() {
+          if (!confirm('Are you sure you want to delete this warehouse?')) {
+            return;
+          }
+          
+          const warehouseId = this.getAttribute('data-delete');
+          
+          try {
+            const response = await fetch(`/employee/api/warehouses/${warehouseId}`, {
+              method: 'DELETE'
+            });
+            
+            if (!response.ok) {
+              throw new Error('Failed to delete warehouse');
+            }
+            
+            // Refresh the page to show updated data
+            window.location.reload();
+          } catch (error) {
+            console.error('Error:', error);
+            alert('Failed to delete warehouse: ' + error.message);
+          }
+        });
+      });
+    });
+  </script>
+</body>
+</html>
